@@ -2,15 +2,20 @@ from flask import Blueprint, request
 
 bp = Blueprint('main', __name__)
 
-@bp.post('/index')
+@bp.route('/index')
 def say_hello():
-    return "hello"
+    return "hello, web3."
 
-@bp.post('/tank/load')
+
+@bp.route('/tank/load')
 def load_state():
+    data = request.json
+    print(data)
     return
 
 
-@bp.post('/tank/save')
+@bp.route('/tank/save')
 def save_state():
+    data = request.json
+    print(data)
     return

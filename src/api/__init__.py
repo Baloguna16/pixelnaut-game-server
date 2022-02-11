@@ -8,6 +8,6 @@ def create_app(config_object=Config()):
     app.config.from_object(config_object)
 
     from .routes import state
-    app.register_blueprints(state)
+    app.register_blueprint(state)
 
     return app
