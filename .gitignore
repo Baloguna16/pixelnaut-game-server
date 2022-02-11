@@ -1,0 +1,14 @@
+# misc
+.DS_Store
+.env.development
+.env.production
+.env.test
+.env
+
+# python
+env
+.DS_Store
+__pycache__
+
+# development notes
+todo.txt
