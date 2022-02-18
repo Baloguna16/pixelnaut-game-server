@@ -7,7 +7,7 @@ def create_app(config_object=Config()):
 
     app = Flask(__name__)
     app.config.from_object(config_object)
-
+    app.secret_key = "this is my key"
     from .routes import state
     app.register_blueprint(state)
     db = Database()

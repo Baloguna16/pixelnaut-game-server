@@ -18,17 +18,19 @@ class Database:
     def set_mint_number(self, num):
         self.mint_number = num
 
-    def get_orcanaut():
+    def get_orcanaut(self):
         return orcanaut.Orcanaut()
 
-    def get_state():
+    def get_state(self,mint_number):
+        result = self.db.pixelpets.find_one({'mint_number' : mint_number})
+        return result
+
+
+    def feed_fish(self):
         pass
 
-    def feed_fish():
+    def clean_tank(self):
         pass
 
-    def clean_tank():
-        pass
-
-    def complete_mini_game(points):
+    def complete_mini_game(self, points):
         pass
