@@ -14,7 +14,7 @@ def say_hello():
 def set_mint():
     mint_number = int(request.json['mint_number'])
     if(mint_number and mint_number > 0 and mint_number < 10000):
-        session['mint_number'] = 1
+        session['mint_number'] = mint_number
         return Response(status=200)
     else:
         return jsonify("Invalid mint number"), 501
