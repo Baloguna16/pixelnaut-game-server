@@ -2,6 +2,7 @@ from bson.json_util import dumps
 from urllib import response
 from flask import Blueprint, jsonify, request, Response, session
 from api.database import mongodriver
+from api.utils.attribute_finder import get_nft_info
 bp = Blueprint('main', __name__)
 db = mongodriver.Database()
 
@@ -13,6 +14,7 @@ def say_hello():
 @bp.route('/setmint')
 def set_mint():
     mint_number = int(request.json['mint_number'])
+    get_nft_info()
     if(mint_number and mint_number > 0 and mint_number < 10000):
         session['mint_number'] = mint_number
         return Response(status=200)
