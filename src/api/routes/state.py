@@ -13,13 +13,10 @@ def say_hello():
 
 @bp.route('/setmint')
 def set_mint():
-    mint_number = int(request.json['mint_number'])
-    get_nft_info()
-    if(mint_number and mint_number > 0 and mint_number < 10000):
-        session['mint_number'] = mint_number
-        return Response(status=200)
-    else:
-        return jsonify("Invalid mint number"), 501
+    mint_number = request.json['mint_number']
+    session['mint_number'] = mint_number
+    return Response(status=200)
+
 
 @bp.route('/tank/load')
 def load_state():

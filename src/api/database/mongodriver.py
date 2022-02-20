@@ -2,8 +2,10 @@ from datetime import datetime
 import pymongo
 import os
 from datetime import datetime
+from api.game_logic.default_chars import get_default_stats
+
+from api.utils.attribute_finder import get_nft_info
 print(os.curdir)
-from api.game_logic import orcanaut
 
 class Database:
     def __init__(self):
@@ -18,22 +20,12 @@ class Database:
         return False
 
     def initialize_orcanaut(self, num):
+        orcanaut = get_nft_info(num)
+        stats = get_default_stats(orcanaut)
         doc = {'mint_number': num, 
             'orcanaut': {
-                'attributes' : {
-                    'eyes': '',
-                    'accessory':'',
-                    'hat':'',
-                    'mouth':'',
-                    'background':'',
-                },
-                'stats':{
-                    'cute': 0,
-                    'speed': 0,
-                    'social': 0,
-                    'nimble': 0,
-                    'wealthy': 0
-                },
+                'attributes' : orcanaut,
+                'stats':stats,
                 'coins': 0
             },
             'tank' : {

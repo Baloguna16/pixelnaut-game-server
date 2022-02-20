@@ -1,28 +1,34 @@
-from collections import namedtuple
 from solana.rpc.api import Client
 from solana.publickey import PublicKey
-from solana.rpc.types import TokenAccountOpts, MemcmpOpts
-from base58 import b58decode
 import base58
 from base64 import b64decode
 import struct
+import urllib.request
+import json
 
 http_client = Client("https://solana-api.projectserum.com")
 
-#
-
-def get_nft_info(): 
-    test = list(bytes(PublicKey('9eohkfSjLNd7GfU7wMoDA5RakpWbzHEodikdik9NHuMW')))
-  #  response = http_client.get_program_accounts(PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'), memcmp_opts=[MemcmpOpts(33,'9eohkfSjLNd7GfU7wMoDA5RakpWbzHEodikdik9NHuMW')])
-    #response = http_client.meta(PublicKey("9eohkfSjLNd7GfU7wMoDA5RakpWbzHEodikdik9NHuMW"), encoding='jsonParsed')
+def get_nft_info(mint): 
+    orcanaut = {}
     key = PublicKey.find_program_address(
-        [bytes("metadata", encoding='ascii'), bytes(PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')),bytes(PublicKey('9eohkfSjLNd7GfU7wMoDA5RakpWbzHEodikdik9NHuMW'))], PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'))
+        [bytes("metadata", encoding='ascii'), bytes(PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')),bytes(PublicKey(mint))], PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'))
     info = http_client.get_account_info(PublicKey(key[0]))
     d = info['result']['value']['data']
     data = b64decode(d[0])
     metadata = unpack_metadata_account(data)
-    a = 1
+    uri = metadata['data']['uri']
+    with urllib.request.urlopen(uri) as response:
+        html = response.read()
+        s = html.decode("utf-8")
+        obj = json.loads(s)
+        assert(obj['name'].startswith('Orcanauts'))
+        for att in obj['attributes']:
+            orcanaut[att['trait_type']] = att['value'].lower().replace(' ','_')
+    return orcanaut
 
+
+# https://github.com/metaplex-foundation/python-api/blob/441c2ba9be76962d234d7700405358c72ee1b35b/metaplex/metadata.py#L180
+#
 def unpack_metadata_account(data):
     assert(data[0] == 4)
     i = 1
