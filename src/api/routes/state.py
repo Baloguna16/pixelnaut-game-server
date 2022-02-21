@@ -13,16 +13,9 @@ db = mongodriver.Database()
 def say_hello():
     return "hello, web3."
 
-@bp.route('/setmint')
-def set_mint():
-    mint_number = request.json['mint_number']
-    session['mint_number'] = mint_number
-    return Response(status=200)
-
-
 @bp.route('/tank/load')
 def load_state():
-    mint_number = session.get('mint_number')
+    mint_number = request.json['mint']
     if(not mint_number):
         return jsonify("Mint number not set"), 501
     result = db.get_state(mint_number)
@@ -30,10 +23,22 @@ def load_state():
         return dumps(result), 200
     return jsonify("Could not get state from database"), 404
 
-@bp.route('/buyitem', methods = ['POST'])
+@bp.route('/upgradetank', methods = ['POST'])
+def upgrade_tank():
+    tank = request.json['tank']
+    mint = request.json['mint']
+    if(not mint):
+        return jsonify("Mint number not set"), 501
+    if(not tank):
+        return jsonify("Need to set an item in the json data"), 401        
+    if api.game_logic.upgrade_tank(mint, tank):
+        return jsonify("success"), 200
+    else:
+        return jsonify("fail"), 200
 
+@bp.route('/buyitem', methods = ['POST'])
 def buy_item():
-    mint = session.get('mint_number')
+    mint = request.json['mint']
     item = request.json['item']
     if(not mint):
         return jsonify("Mint number not set"), 501

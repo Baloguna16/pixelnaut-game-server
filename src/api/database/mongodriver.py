@@ -40,9 +40,12 @@ class Database:
     def set_coin_balance(self, mint, balance):
         result = self.db.pixelpets.update_one({'mint_number': mint}, {'$set': {'orcanaut.coins': balance}})
 
+    def switch_tank(self, mint, tank):
+        result = self.db.pixelpets.update_one({'mint_number': mint}, {'$set': {'tank.type': tank}})
+
     def add_item(self, mint, item):
         result = self.db.pixelpets.update_one({'mint_number': mint}, {'$push': {'tank.decorations': item}})
-        a = 1
+
     def get_state(self,mint):
         result = self.db.pixelpets.find_one({'mint_number' : mint})
         if(result == None):
