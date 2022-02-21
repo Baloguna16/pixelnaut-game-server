@@ -1,8 +1,10 @@
+from crypt import methods
 from bson.json_util import dumps
 from urllib import response
 from flask import Blueprint, jsonify, request, Response, session
 from api.database import mongodriver
 from api.utils.attribute_finder import get_nft_info
+import api.game_logic
 bp = Blueprint('main', __name__)
 db = mongodriver.Database()
 
@@ -27,6 +29,18 @@ def load_state():
     if(result):
         return dumps(result), 200
     return jsonify("Could not get state from database"), 404
+
+@bp.route('/buyitem', methods = ['POST'])
+
+def buy_item():
+    mint = session.get('mint_number')
+    item = request.json['item']
+    if(not mint):
+        return jsonify("Mint number not set"), 501
+    if(not item):
+        return jsonify("Need to set an item in the json data"), 401        
+    api.game_logic.buy_item(mint, item)
+    return Response(status=200)
 
 @bp.route('/tank/save')
 def save_state():

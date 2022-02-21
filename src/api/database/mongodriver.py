@@ -2,7 +2,7 @@ from datetime import datetime
 import pymongo
 import os
 from datetime import datetime
-from api.game_logic.default_chars import get_default_stats
+from api.utils.default_chars import get_default_stats
 
 from api.utils.attribute_finder import get_nft_info
 print(os.curdir)
@@ -15,9 +15,6 @@ class Database:
 
     def get_name(self, name):
         print(self.db.test.find_one({'name':'matt'})['role'])
-
-    def buy_item(name):
-        return False
 
     def initialize_orcanaut(self, num):
         orcanaut = get_nft_info(num)
@@ -35,15 +32,20 @@ class Database:
                 'type': 'bag' 
             }}
         self.db.pixelpets.insert_one(doc)
+    
+    def get_coin_balance(self, mint):
+        state = self.get_state(mint)
+        return state['orcanaut']['coins']
 
-    def get_orcanaut(self):
-        return orcanaut.Orcanaut()
+    def set_coin_balance(self, mint, balance):
+        result = self.db.pixelpets.update_one({'mint_number': mint}, {'$set': {'orcanaut.coins': balance}})
+        a = 1
 
-    def get_state(self,mint_number):
-        result = self.db.pixelpets.find_one({'mint_number' : mint_number})
+    def get_state(self,mint):
+        result = self.db.pixelpets.find_one({'mint_number' : mint})
         if(result == None):
-            self.initialize_orcanaut(mint_number)
-            result = self.db.pixelpets.find_one({'mint_number' : mint_number})
+            self.initialize_orcanaut(mint)
+            result = self.db.pixelpets.find_one({'mint_number' : mint})
         return result
 
 
@@ -55,3 +57,7 @@ class Database:
 
     def complete_mini_game(self, points):
         pass
+
+
+
+
