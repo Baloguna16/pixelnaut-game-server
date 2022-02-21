@@ -23,7 +23,7 @@ def get_nft_info(mint):
         obj = json.loads(s)
         assert(obj['name'].startswith('Orcanauts'))
         for att in obj['attributes']:
-            orcanaut[att['trait_type']] = att['value'].lower().replace(' ','_')
+            orcanaut[att['trait_type']] = att['value'].lower().replace(' ','_').replace(',','')
     return orcanaut
 
 

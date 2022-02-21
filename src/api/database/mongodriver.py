@@ -54,14 +54,11 @@ class Database:
         return result
 
 
-    def feed_fish(self):
-        pass
+    def feed_fish(self, mint):
+        result = self.db.pixelpets.update_one({'mint_number': mint},{'$set':{'tank.last_fed':datetime.timestamp(datetime.now())}})
 
-    def clean_tank(self):
-        pass
-
-    def complete_mini_game(self, points):
-        pass
+    def clean_tank(self, mint):
+        result = self.db.pixelpets.update_one({'mint_number': mint},{'$set':{'tank.last_cleaned':datetime.timestamp(datetime.now())}})
 
 
 

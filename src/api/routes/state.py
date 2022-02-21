@@ -6,7 +6,6 @@ import api.game_logic
 bp = Blueprint('main', __name__)
 db = mongodriver.Database()
 
-
 @bp.route('/index')
 def say_hello():
     return "hello, web3."
@@ -34,7 +33,7 @@ def upgrade_tank():
     else:
         return jsonify("fail"), 200
 
-
+#Need to encrypt the number of coins
 @bp.route('/wingame', methods = ['POST'])
 def win_game():
     mint = request.json['mint']
@@ -46,7 +45,7 @@ def win_game():
     balance = db.get_coin_balance(mint)
     db.set_coin_balance(mint, balance + coins)   
     return jsonify("success"), 200
-    
+
 @bp.route('/buyitem', methods = ['POST'])
 def buy_item():
     mint = request.json['mint']
@@ -59,6 +58,22 @@ def buy_item():
         return jsonify("success"), 200
     else:
         return jsonify("fail"), 200
+
+@bp.route('/feedfish', methods=['POST'])
+def feed_fish():
+    mint = request.json['mint']
+    if(not mint):
+        return jsonify("Mint number not set"), 501
+    db.feed_fish(mint)
+    return jsonify("success"), 200
+
+@bp.route('/changewater', methods=['POST'])
+def change_water():
+    mint = request.json['mint']
+    if(not mint):
+        return jsonify("Mint number not set"), 501 
+    db.clean_tank(mint)
+    return jsonify("success"), 200
 
 @bp.route('/tank/save')
 def save_state():
