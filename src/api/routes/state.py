@@ -39,8 +39,10 @@ def buy_item():
         return jsonify("Mint number not set"), 501
     if(not item):
         return jsonify("Need to set an item in the json data"), 401        
-    api.game_logic.buy_item(mint, item)
-    return Response(status=200)
+    if api.game_logic.buy_item(mint, item):
+        return jsonify("success"), 200
+    else:
+        return jsonify("fail"), 200
 
 @bp.route('/tank/save')
 def save_state():
