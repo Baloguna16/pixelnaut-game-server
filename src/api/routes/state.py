@@ -1,6 +1,7 @@
 from bson.json_util import dumps
 from flask import Blueprint, jsonify, request, Response, session
 from api.database import mongodriver
+from api.game_logic.time_management import check_timeouts
 from api.utils.attribute_finder import get_nft_info
 import api.game_logic
 bp = Blueprint('main', __name__)
@@ -16,6 +17,7 @@ def load_state():
     if(not mint_number):
         return jsonify("Mint number not set"), 501
     result = db.get_state(mint_number)
+    check_timeouts(mint_number)
     if(result):
         return dumps(result), 200
     return jsonify("Could not get state from database"), 404
@@ -64,7 +66,7 @@ def feed_fish():
     mint = request.json['mint']
     if(not mint):
         return jsonify("Mint number not set"), 501
-    db.feed_fish(mint)
+    api.game_logic.feed_fish(mint)
     return jsonify("success"), 200
 
 @bp.route('/changewater', methods=['POST'])
@@ -72,7 +74,7 @@ def change_water():
     mint = request.json['mint']
     if(not mint):
         return jsonify("Mint number not set"), 501 
-    db.clean_tank(mint)
+    api.game_logic.clean_tank(mint)
     return jsonify("success"), 200
 
 @bp.route('/tank/save')
