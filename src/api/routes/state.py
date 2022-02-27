@@ -77,8 +77,12 @@ def change_water():
     api.game_logic.clean_tank(mint)
     return jsonify("success"), 200
 
-@bp.route('/tank/save')
-def save_state():
-    data = request.json
-    print(data)
-    return
+
+@bp.route('/update/itemposition', methods=['POST'])
+def update_item_position():
+    mint = request.json['mint']
+    item = request.json['item']
+    x = request.json['x']
+    y = request.json['y']
+    db.update_item_position(mint, item, x, y)
+    return jsonify("success"), 200
