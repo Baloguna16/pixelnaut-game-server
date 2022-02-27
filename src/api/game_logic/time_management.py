@@ -21,7 +21,12 @@ def feed_fish(mint):
     db.feed_fish(mint)
 def clean_tank(mint):
     _, last_cleaned_duration = get_durations(mint)
-
+    if last_cleaned_duration > CLEANING_TIMEOUT:
+        db.reset_stats(mint)
+    elif last_cleaned_duration > CLEANING_TIMEOUT/2:
+        stat_increase = ceil(0.0028*(last_cleaned_duration - FEEDING_TIMEOUT/2)**2)
+        result = db.increase_stats(mint, stat_increase)
+    db.clean_tank(mint)
 def get_durations(mint):
     result = db.get_state(mint)
     now = datetime.timestamp(datetime.now())
