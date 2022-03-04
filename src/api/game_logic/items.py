@@ -4,7 +4,7 @@ items = [
     {'name': 'green_plant',
     'price' : 2},
     {'name': 'sand_castle',
-    'price': 30}]
+    'price': 30}]   
 tanks = [
     {'name':'fish_bowl',
     'price': 30},
