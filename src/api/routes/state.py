@@ -19,6 +19,7 @@ def load_state():
     result = db.get_state(mint_number)
     check_timeouts(mint_number)
     if(result):
+        result['type'] = 'load'
         return dumps(result), 200
     return jsonify("Could not get state from database"), 404
 
@@ -30,36 +31,38 @@ def upgrade_tank():
         return jsonify("Mint number not set"), 501
     if(not tank):
         return jsonify("Need to set a tank in the json data"), 401        
-    if api.game_logic.upgrade_tank(mint, tank):
-        return jsonify("success"), 200
+    cost = api.game_logic.upgrade_tank(mint, tank)
+    if cost:
+        return jsonify({'type': 'upgradetank', 'result': 'success', 'cost': cost}), 200
     else:
-        return jsonify("fail"), 200
+        return jsonify({'type': 'upgradetank', 'result': 'fail'}), 200
 
 #Need to encrypt the number of coins
 @bp.route('/wingame', methods = ['POST'])
 def win_game():
     mint = request.json['mint']
     coins = request.json['coins']
-    if(not mint):
+    if not mint:
         return jsonify("Mint number not set"), 501
-    if(not coins):
+    if not coins:
         return jsonify("Need to set the number of coins json data"), 401
     balance = db.get_coin_balance(mint)
     db.set_coin_balance(mint, balance + coins)   
-    return jsonify("success"), 200
+    return jsonify({'type': 'wingame', 'result': 'success'}), 200
 
 @bp.route('/buyitem', methods = ['POST'])
 def buy_item():
     mint = request.json['mint']
     item = request.json['item']
-    if(not mint):
+    if not mint:
         return jsonify("Mint number not set"), 501
-    if(not item):
+    if not item:
         return jsonify("Need to set an item in the json data"), 401        
-    if api.game_logic.buy_item(mint, item):
-        return jsonify("success"), 200
+    cost = api.game_logic.buy_item(mint, item)
+    if cost:
+        return jsonify({'type': 'buyitem', 'result': 'success', 'cost': cost}), 200
     else:
-        return jsonify("fail"), 200
+        return jsonify({'type': 'buyitem', 'result': 'fail'}), 200
 
 @bp.route('/feedfish', methods=['POST'])
 def feed_fish():
@@ -67,7 +70,7 @@ def feed_fish():
     if(not mint):
         return jsonify("Mint number not set"), 501
     api.game_logic.feed_fish(mint)
-    return jsonify("success"), 200
+    return jsonify({'type': 'feedfish', 'result': 'success'}), 200
 
 @bp.route('/changewater', methods=['POST'])
 def change_water():
@@ -75,7 +78,7 @@ def change_water():
     if(not mint):
         return jsonify("Mint number not set"), 501 
     api.game_logic.clean_tank(mint)
-    return jsonify("success"), 200
+    return jsonify({'type': 'changewater', 'result': 'success'}), 200
 
 
 @bp.route('/update/itemposition', methods=['POST'])
@@ -85,4 +88,4 @@ def update_item_position():
     x = request.json['x']
     y = request.json['y']
     db.update_item_position(mint, item, x, y)
-    return jsonify("success"), 200
+    return jsonify({'type': 'itemposition', 'result': 'success'}), 200

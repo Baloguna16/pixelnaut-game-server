@@ -8,13 +8,14 @@ def upgrade_tank(mint, tank):
     balance = db.get_coin_balance(mint)
     price = [i['price'] for i in tanks if i['name'] == tank][0]
     if(price > balance):
-        return False
+        return 0
     result = db.get_state(mint)
     if tank == result["tank"]["type"]:
-        return False 
+        return 0 
     db.set_coin_balance(mint, balance - price)
     db.switch_tank(mint, tank)
     result = db.get_state(mint)
+    return price
 
     return True
 def buy_item(mint, item):
@@ -22,11 +23,11 @@ def buy_item(mint, item):
     balance = db.get_coin_balance(mint)
     price = [i['price'] for i in items if i['name'] == item][0]
     if(price > balance):
-        return False
+        return 0
     result = db.get_state(mint)
     if item in result["tank"]["decorations"]:
-        return False 
+        return 0 
     db.set_coin_balance(mint, balance - price)
     db.add_item(mint, item)
     result = db.get_state(mint)
-    return True
+    return price
