@@ -59,10 +59,10 @@ def buy_item():
     if not item:
         return jsonify("Need to set an item in the json data"), 401        
     cost = api.game_logic.buy_item(mint, item)
-    if cost:
-        return jsonify({'type': 'buyitem', 'result': 'success', 'cost': cost}), 200
+    if cost > 0:
+        return jsonify({'type': 'buyitem', 'result': 'success', 'cost': cost, 'item': item}), 200
     else:
-        return jsonify({'type': 'buyitem', 'result': 'fail'}), 200
+        return jsonify({'type': 'buyitem', 'result': 'fail', 'item': item, 'cost': cost}), 200
 
 @bp.route('/feedfish', methods=['POST'])
 def feed_fish():

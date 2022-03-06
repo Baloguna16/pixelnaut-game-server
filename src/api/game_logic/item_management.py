@@ -25,8 +25,8 @@ def buy_item(mint, item):
     if(price > balance):
         return 0
     result = db.get_state(mint)
-    if item in result["tank"]["decorations"]:
-        return 0 
+    if item in [x['item'] for x in result['tank']['decorations']]:
+        return -1 
     db.set_coin_balance(mint, balance - price)
     db.add_item(mint, item)
     result = db.get_state(mint)
