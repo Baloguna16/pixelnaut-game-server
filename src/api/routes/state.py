@@ -23,6 +23,17 @@ def load_state():
         return dumps(result), 200
     return jsonify("Could not get state from database"), 404
 
+@bp.route('/coinbalance')
+def get_coin_balance():
+    mint_number = request.json['mint']
+    if(not mint_number):
+        return jsonify("Mint number not set"), 501
+    result = db.get_state(mint_number)
+    check_timeouts(mint_number)
+    if(result):
+        return dumps({'coins':result['coins'], 'type':'coinbalance'}), 200
+    return jsonify("Could not get state from database"), 404
+
 @bp.route('/upgradetank', methods = ['POST'])
 def upgrade_tank():
     tank = request.json['tank']
