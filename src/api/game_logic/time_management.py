@@ -13,20 +13,33 @@ def check_timeouts(mint):
 
 def feed_fish(mint):
     last_fed_duration, _ = get_durations(mint)
+    db.feed_fish(mint)
     if last_fed_duration > FEEDING_TIMEOUT:
         db.reset_stats(mint)
+        db.set_coin_balance(mint, 0)
+        return -1
     elif last_fed_duration > FEEDING_TIMEOUT/2:
         stat_increase = ceil(0.055*(last_fed_duration - FEEDING_TIMEOUT/2)**2)
         result = db.increase_stats(mint, stat_increase)
-    db.feed_fish(mint)
+        balance = db.get_coin_balance(mint)
+        db.set_coin_balance(mint, balance + stat_increase)
+        return  stat_increase
+    return 0
 def clean_tank(mint):
     _, last_cleaned_duration = get_durations(mint)
+    db.clean_tank(mint)
     if last_cleaned_duration > CLEANING_TIMEOUT:
         db.reset_stats(mint)
+        db.set_coin_balance(mint, 0)
+        return -1
     elif last_cleaned_duration > CLEANING_TIMEOUT/2:
         stat_increase = ceil(0.0028*(last_cleaned_duration - FEEDING_TIMEOUT/2)**2)
         result = db.increase_stats(mint, stat_increase)
-    db.clean_tank(mint)
+        balance = db.get_coin_balance(mint)
+        db.set_coin_balance(mint, balance + stat_increase)
+        return stat_increase
+    return 0
+
 def get_durations(mint):
     result = db.get_state(mint)
     now = datetime.timestamp(datetime.now())

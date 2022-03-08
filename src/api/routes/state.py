@@ -69,16 +69,16 @@ def feed_fish():
     mint = request.json['mint']
     if(not mint):
         return jsonify("Mint number not set"), 501
-    api.game_logic.feed_fish(mint)
-    return jsonify({'type': 'feedfish', 'result': 'success'}), 200
+    coins = api.game_logic.feed_fish(mint)
+    return jsonify({'type': 'feedfish', 'result': 'success', 'coins': coins}), 200
 
 @bp.route('/changewater', methods=['POST'])
 def change_water():
     mint = request.json['mint']
     if(not mint):
         return jsonify("Mint number not set"), 501 
-    api.game_logic.clean_tank(mint)
-    return jsonify({'type': 'changewater', 'result': 'success'}), 200
+    coins = api.game_logic.clean_tank(mint)
+    return jsonify({'type': 'changewater', 'result': 'success', 'coins': coins}), 200
 
 
 @bp.route('/update/itemposition', methods=['POST'])
