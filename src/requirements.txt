@@ -15,4 +15,5 @@ pytest==7.0.0
 tomli==2.0.1
 Werkzeug==2.0.3
 pymongo==4.0.1
-solana==0.21.0
+solana==0.21.0pip
+flask-cors==3.0.10

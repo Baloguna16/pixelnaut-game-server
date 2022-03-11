@@ -13,7 +13,7 @@ def say_hello():
 
 @bp.route('/tank/load')
 def load_state():
-    mint_number = request.json['mint']
+    mint_number = request.args['mint']
     if(not mint_number):
         return jsonify("Mint number not set"), 501
     result = db.get_state(mint_number)
@@ -25,7 +25,7 @@ def load_state():
 
 @bp.route('/coinbalance')
 def get_coin_balance():
-    mint_number = request.json['mint']
+    mint_number = request.args['mint']
     if(not mint_number):
         return jsonify("Mint number not set"), 501
     coins = check_timeouts(mint_number)
