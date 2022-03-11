@@ -44,7 +44,7 @@ class Database:
         result = self.db.pixelpets.update_one({'mint_number': mint}, {'$set': {'tank.type': tank}})
 
     def add_item(self, mint, item):
-        result = self.db.pixelpets.update_one({'mint_number': mint}, {'$push': {'tank.decorations': {'item':item, 'position': {'x': 100, 'y': 100}}}})
+        result = self.db.pixelpets.update_one({'mint_number': mint}, {'$push': {'tank.decorations': {'item':item, 'position': {'x': 150, 'y': 100}}}})
 
     def update_item_position(self, mint, item, x, y):
   #      result = self.db.pixelpets.update_one({'$and', ({'mint_number': mint}, {'tank.decorations.item' : item})}, {'$set': {'tank.decorations.$.position': {'x': x, 'y': y}}})
