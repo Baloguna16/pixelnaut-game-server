@@ -26,10 +26,8 @@ items = [
     ]   
 tanks = [
     {'name':'fish_bowl',
-    'price': 30},
+    'price': 100},
     {'name': 'basic_aquarium',
-    'price': 200},
-    {'name': 'royal_aquarium',
-    'price': 1000},
-    {'name': 'magestic_koi_pond',
-    'price': 2000}]
+    'price': 500},
+    {'name': 'wide_aquarium',
+    'price': 1000},]
