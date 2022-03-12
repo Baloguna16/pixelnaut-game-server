@@ -41,10 +41,10 @@ def upgrade_tank():
     if(not tank):
         return jsonify("Need to set a tank in the json data"), 401        
     cost, balance = api.game_logic.upgrade_tank(mint, tank)
-    if cost:
-        return jsonify({'type': 'upgradetank', 'result': 'success', 'cost': cost, 'balance': balance}), 200
+    if cost > 0:
+        return jsonify({'type': 'upgradetank', 'result': 'success', 'cost': cost, 'item': tank, 'balance': balance}), 200
     else:
-        return jsonify({'type': 'upgradetank', 'result': 'fail', 'balance': balance}), 200
+        return jsonify({'type': 'upgradetank', 'result': 'fail', 'cost':cost, 'item': tank, 'balance': balance}), 200
 
 #Need to encrypt the number of coins
 @bp.route('/wingame', methods = ['POST'])

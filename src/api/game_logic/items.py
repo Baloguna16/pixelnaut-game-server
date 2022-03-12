@@ -25,9 +25,15 @@ items = [
     'price': 50},   
     ]   
 tanks = [
+    {'name': 'bag',
+    'tier':0,
+    'price': 0},
     {'name':'fish_bowl',
+    'tier': 1,
     'price': 100},
     {'name': 'basic_aquarium',
+    'tier': 2,
     'price': 500},
     {'name': 'wide_aquarium',
+    'tier': 3,
     'price': 1000},]
