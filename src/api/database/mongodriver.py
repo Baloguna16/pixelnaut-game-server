@@ -13,9 +13,6 @@ class Database:
         self.db = client.newdb
         a = {'a' : {1:2,3:4}}
 
-    def get_name(self, name):
-        print(self.db.test.find_one({'name':'matt'})['role'])
-
     def initialize_orcanaut(self, num):
         orcanaut = get_nft_info(num)
         stats = get_default_stats(orcanaut)

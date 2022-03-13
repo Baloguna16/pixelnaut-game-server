@@ -13,6 +13,6 @@ def create_app(config_object=Config()):
     from .routes import state
     app.register_blueprint(state)
     db = Database()
-    db.get_name('matt')
+
 
     return app
