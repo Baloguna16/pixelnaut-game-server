@@ -11,7 +11,6 @@ class Database:
     def __init__(self):
         client = pymongo.MongoClient("localhost", 27017)
         self.db = client.newdb
-        a = {'a' : {1:2,3:4}}
 
     def initialize_orcanaut(self, num):
         orcanaut = get_nft_info(num)
@@ -25,7 +24,7 @@ class Database:
             },
             'tank' : {
                 'last_cleaned': datetime.timestamp(datetime.now()),
-                'decorations': [],
+                'decorations':  [{'item': orcanaut['accessory'], 'position': {'x':150, 'y': 100}}] if orcanaut['accessory'] != 'none'  else [],
                 'type': 'bag' 
             }}
         self.db.pixelpets.insert_one(doc)
