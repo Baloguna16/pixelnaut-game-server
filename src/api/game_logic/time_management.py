@@ -3,8 +3,8 @@ from api.database import mongodriver
 db = mongodriver.Database()
 from math import ceil
 
-FEEDING_TIMEOUT = 60
-CLEANING_TIMEOUT = 60*7
+FEEDING_TIMEOUT = 60*60*24
+CLEANING_TIMEOUT = 60*60*24*7
 
 def check_timeouts(mint):
     last_fed_duration, last_cleaned_duration = get_durations(mint)
@@ -26,7 +26,7 @@ def feed_fish(mint):
         db.clean_tank(mint)
         return -1, 0
     elif last_fed_duration > FEEDING_TIMEOUT/2:
-        stat_increase = ceil(0.055*(last_fed_duration - FEEDING_TIMEOUT/2)**2)
+        stat_increase = ceil(.0000000537*(last_fed_duration - FEEDING_TIMEOUT/2)**2)
         result = db.increase_stats(mint, stat_increase)
         
         db.set_coin_balance(mint, balance + stat_increase)
@@ -42,7 +42,7 @@ def clean_tank(mint):
         db.feed_fish(mint)
         return -1, 0
     elif last_cleaned_duration > CLEANING_TIMEOUT/2:
-        stat_increase = ceil(0.0028*(last_cleaned_duration - FEEDING_TIMEOUT/2)**2)
+        stat_increase = ceil(.0000000076*(last_cleaned_duration - CLEANING_TIMEOUT/2)**2)
         result = db.increase_stats(mint, stat_increase)
         db.set_coin_balance(mint, balance + stat_increase)
         return stat_increase, balance + stat_increase
